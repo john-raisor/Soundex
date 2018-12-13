@@ -1,18 +1,6 @@
 
 #include <gmock/gmock.h>
-#include <iostream>
-#include <string>
-
-using namespace std;
-
-class Soundex
-{
-public:
-	string Encode( const string &word)
-	{
-		return( word);
-	}
-};
+#include "Soundex.h"
 
 /*
 Save the first letter. Remove all occurrences of a, e, i, o, u, y, h, w.
@@ -23,13 +11,85 @@ Append 3 zeros if result contains less than 3 digits. Remove all except first le
  */
 
 using ::testing::Eq;
-TEST( SoundexEncoding, RetainsSoleLetterOfOneLetterWord)
+// fixture
+class SoundEncodingFixture : public testing::Test
+{
+public:
+	SoundEncodingFixture()
+	{
+
+	}
+
+public:
+	Soundex soundex;
+};
+TEST_F( SoundEncodingFixture, RetainsSoleLetterOfOneLetterWordA)
 {
 	// Arrange
-	Soundex soundex;
-	//Act
-	auto encode = soundex.Encode( "A");
-	//Assert
-	ASSERT_THAT( encode, Eq("A"));
+	// Act, Assert
+	ASSERT_THAT( soundex.Encode( "A"), Eq( "A000"));
+}
+
+TEST_F( SoundEncodingFixture, RetainsSoleLetterOfOneLetterWordB)
+{
+	// Arrange
+	// Act, Assert
+	ASSERT_THAT( soundex.Encode( "B"), Eq( "B000"));
+}
+
+TEST_F( SoundEncodingFixture, RetainsSoleLetterOfOneLetterWordZ)
+{
+	// Arrange
+	// Act, Assert
+	ASSERT_THAT( soundex.Encode( "Z"), Eq( "Z000"));
+}
+
+TEST_F( SoundEncodingFixture, RetainsSoleLetterOfOneLetterWordC)
+{
+	// Arrange
+	// Act, Assert
+	ASSERT_THAT( soundex.Encode( "C"), Eq( "C000"));
+}
+
+TEST_F( SoundEncodingFixture, RemovesLetterA)
+{
+	// Arrange
+	// Act, Assert
+	ASSERT_THAT( soundex.Encode( "AA"), Eq( "A000"));
+}
+
+TEST_F( SoundEncodingFixture, PadsWithZerosThreeDigits)
+{
+	// Arrange
+	// Act, Assert
+	ASSERT_THAT( soundex.Encode( "I"), Eq( "I000"));
+}
+
+TEST_F( SoundEncodingFixture, ReplaceConsonantB1)
+{
+	// Arrange
+	// Act, Assert
+	ASSERT_THAT( soundex.Encode( "AB"), Eq( "A100"));
+}
+
+TEST_F( SoundEncodingFixture, ReplaceConsonantC2)
+{
+	// Arrange
+	// Act, Assert
+	ASSERT_THAT( soundex.Encode( "AC"), Eq( "A200"));
+}
+
+TEST_F( SoundEncodingFixture, ReplaceConsonantT3)
+{
+	// Arrange
+	// Act, Assert
+	ASSERT_THAT( soundex.Encode( "AT"), Eq( "A300"));
+}
+
+TEST_F( SoundEncodingFixture, ReplaceConsonantrr)
+{
+	// Arrange
+	// Act, Assert
+	ASSERT_THAT( soundex.Encode( "ARR"), Eq( "A600"));
 }
 
